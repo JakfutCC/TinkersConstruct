@@ -27,7 +27,6 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraft.util.AxisAlignedBB;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
-import net.minecraft.world.chunk.Chunk;
 import net.minecraftforge.common.util.ForgeDirection;
 import net.minecraftforge.fluids.Fluid;
 import net.minecraftforge.fluids.FluidRegistry;
@@ -892,26 +891,20 @@ public class SmelteryLogic extends InventoryLogic implements IActiveLogic, IFaci
         int zMax = z + sides[3] - 1;
 
         // Check inside
-        if (y >= 0 && y < 256) {
-            for (int xPos = xMin; xPos <= xMax; xPos++) {
-                for (int zPos = zMin; zPos <= zMax; zPos++) {
-                    Chunk chunk = this.worldObj.getChunkFromBlockCoords(xPos, zPos);
-                    if (chunk == null) continue;
+        for (int xPos = xMin; xPos <= xMax; xPos++) {
+            for (int zPos = zMin; zPos <= zMax; zPos++) {
+                if (this.validBlockID(worldObj.getBlock(xPos, y, zPos))
+                        && worldObj.getBlockMetadata(xPos, y, zPos) >= 2) {
+                    TileEntity te = worldObj.getTileEntity(xPos, y, zPos);
 
-                    int xx = xPos & 15;
-                    int zz = zPos & 15;
-                    if (this.validBlockID(chunk.getBlock(xx, y, zz)) && chunk.getBlockMetadata(xx, y, zz) >= 2) {
-                        TileEntity te = worldObj.getTileEntity(xPos, y, zPos);
-
-                        if (te instanceof MultiServantLogic) {
-                            MultiServantLogic servant = (MultiServantLogic) te;
-                            if (servant.hasValidMaster()) {
-                                if (servant.verifyMaster(this, worldObj, this.xCoord, this.yCoord, this.zCoord))
-                                    bottomBricks++;
-                            } else {
-                                servant.overrideMaster(this.xCoord, this.yCoord, this.zCoord);
+                    if (te instanceof MultiServantLogic) {
+                        MultiServantLogic servant = (MultiServantLogic) te;
+                        if (servant.hasValidMaster()) {
+                            if (servant.verifyMaster(this, worldObj, this.xCoord, this.yCoord, this.zCoord))
                                 bottomBricks++;
-                            }
+                        } else {
+                            servant.overrideMaster(this.xCoord, this.yCoord, this.zCoord);
+                            bottomBricks++;
                         }
                     }
                 }
