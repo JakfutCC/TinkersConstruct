@@ -1,6 +1,7 @@
 // Add your dependencies here
 
 dependencies {
+    compileOnly('com.cardinalstar.cubicchunks:CubicChunks1710:v0.1.21-alpha-pre:dev') { transitive = false }
     compileOnlyApi('com.github.GTNewHorizons:Angelica:2.2.10:api')
     api("com.github.GTNewHorizons:Mantle:0.5.4:dev")
     api("com.github.GTNewHorizons:ForgeMultipart:1.7.12:dev")

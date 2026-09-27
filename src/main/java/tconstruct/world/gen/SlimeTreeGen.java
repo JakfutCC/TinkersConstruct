@@ -9,6 +9,7 @@ import net.minecraft.world.gen.feature.WorldGenerator;
 import net.minecraftforge.common.util.ForgeDirection;
 
 import tconstruct.tools.TinkerTools;
+import tconstruct.util.CubicPlacementBounds;
 import tconstruct.world.TinkerWorld;
 
 public class SlimeTreeGen extends WorldGenerator {
@@ -39,7 +40,7 @@ public class SlimeTreeGen extends WorldGenerator {
             if (yPos == -1) return false;
         }
 
-        if (yPos >= 1 && yPos + height + 1 <= 256) {
+        if (CubicPlacementBounds.canGrow(world, xPos, yPos, zPos, height, seekHeight)) {
             Block soil = world.getBlock(xPos, yPos - 1, zPos);
             boolean isSoil = (soil != null
                     && soil.canSustainPlant(world, xPos, yPos - 1, zPos, ForgeDirection.UP, TinkerWorld.slimeSapling));

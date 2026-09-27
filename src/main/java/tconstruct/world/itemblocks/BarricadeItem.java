@@ -13,6 +13,7 @@ import net.minecraft.world.World;
 
 import cpw.mods.fml.relauncher.Side;
 import cpw.mods.fml.relauncher.SideOnly;
+import tconstruct.util.CubicPlacementBounds;
 
 public class BarricadeItem extends ItemBlock {
 
@@ -68,7 +69,7 @@ public class BarricadeItem extends ItemBlock {
             return false;
         } else if (!player.canPlayerEdit(x, y, z, side, stack)) {
             return false;
-        } else if (y == 255 && this.b.getMaterial().isSolid()) {
+        } else if (!CubicPlacementBounds.canPlace(world, x, y, z, this.b.getMaterial().isSolid())) {
             return false;
         } else if (world.canPlaceEntityOnSide(this.b, x, y, z, false, side, player, stack)) {
             Block block = this.b;
